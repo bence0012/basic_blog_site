@@ -12,11 +12,26 @@
 
                     <div class="card-body">
                         
+                    <form method="POST" action="{{ route('singlePost',[$subitem['id']]) }}">
+                        {{ csrf_field() }}
+                        {{ method_field('GET') }}
 
+            
+                        <button type="submit">Check post</button>
+        
+                    </form>
                         
                     </div>
                 </div>
             @endforeach
+                <form method="POST" action="{{ route('create')}}">
+                    {{ csrf_field() }}
+                    {{ method_field('GET') }}
+
+            
+                    <button type="submit">Create post</button>
+        
+                </form>
         </div>
     </div>
 </div>
