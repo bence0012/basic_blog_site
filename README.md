@@ -35,7 +35,9 @@ composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
-php artisan db:seed //only if you want the DB to be filled with example data
+php artisan db:seed 
 php artisan serve --host 0.0.0.0 --port 80
 ```
-Now you can reach the site on the host machine at 0.0.0.0 or at the host ip adress.
+Only use php artisan db:seed if you want the DB to be filled with example data
+
+Now you can reach the site on the host machine at 0.0.0.0 or at the hosts ip adress.
