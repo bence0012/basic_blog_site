@@ -18,6 +18,7 @@ class CommentFactory extends Factory
     {
         return [
             'comment'=>fake()->sentence(100),
+            'user_id'=>rand(1,3),
             'created_at'=>now(),
         ];
     }

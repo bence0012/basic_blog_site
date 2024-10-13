@@ -8,6 +8,8 @@ use App\Models\Post;
 use App\Models\User;
 use Auth;
 
+use Illuminate\Support\Facades\Gate;
+
 
 class CommentController extends Controller
 {
@@ -36,8 +38,9 @@ class CommentController extends Controller
 
     public function delete(Post $post, Comment $comment)
     {
-        if((!Auth::check()) || (Auth::user()->id!=$comment->user_id && Auth::user()->id!=$post->user_id))
-            return redirect()->route('singlePost',[$post->id])->with('error','Only the comment\'s owner can do this');
+        if (! Gate::allows('delete-post', $post)) {
+            abort(403);
+        }
         $comment->delete();
         return redirect()->route('singlePost',[$post->id])->with('success','Comment successfilly deleted!');
 

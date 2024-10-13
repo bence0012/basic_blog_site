@@ -19,7 +19,6 @@ class PostFactory extends Factory
         return [
             'title'=>fake()->sentence(20),
             'content'=>fake()->sentence(100),
-            'user_id'=>\Auth::user()->id,
             'created_at'=>now(),
         ];
     }

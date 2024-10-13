@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('user_id')->nullable();
             $table->string('comment');
             $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

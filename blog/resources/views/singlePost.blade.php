@@ -16,7 +16,10 @@
 
                 <div class="card-body">
                     {{ __($post['content']) }}
-
+                    
+                    <div>
+                        Created at: {{ $post['created_at']->format('d M Y - H:i:s') }}
+                    </div>
                     @auth
                         <form method="POST" action="{{ route('getEdit',[$post['id']]) }}">
                             {{ csrf_field() }}
@@ -68,6 +71,9 @@
                     <div class="card-body">
                         <div class="row justify-content-center">
                             {{ __($comment['comment']) }}
+                        </div>
+                        <div>
+                            Created at: {{ $post['created_at']->format('d M Y - H:i:s') }}
                         </div>
                         <form method="POST" action="{{ route('delcomment',[$post['id'],$comment['id']]) }}">
                             {{ csrf_field() }}

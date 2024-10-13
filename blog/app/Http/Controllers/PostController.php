@@ -11,6 +11,9 @@ use App\Models\Comment;
 use Session;
 use Auth;
 
+use Illuminate\Support\Facades\Gate;
+
+
 class PostController extends Controller
 {
     //
@@ -62,9 +65,8 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        if(!$this->checkOwner($post))
-        {
-            return redirect()->route('singlePost')->with('error','Only the post\'s owner can do this');
+        if (! Gate::allows('update-post', $post)) {
+            abort(403);
         }
 
         $validated =$request->validate([
@@ -80,22 +82,18 @@ class PostController extends Controller
 
     public function getEdit(Post $post)
     {
+        if (! Gate::allows('update-post', $post)) {
+            abort(403);
+        }
 
-        if($this->checkOwner($post))
-        {
-            return view('edit')->with('post', $post);
-        }
-        else
-        {
             return redirect()->route('singlePost',[$post])->with('error','Only the post\'s owner can do this');
-        }
+        
     }
 
     public function delete(Post $post)
     {
-        if(!$this->checkOwner($post))
-        {
-            return redirect()->route('posts')->with('error','Only the post\'s owner can do this');
+        if (! Gate::allows('delete-post', $post)) {
+            abort(403);
         }
 
         $comments=Comment::where('post_id', $post->id)->get();
@@ -105,14 +103,5 @@ class PostController extends Controller
 
         $post->delete();
         return redirect()->route('posts')->with('success','The blog post was successfully deleted!');
-    }
-
-
-    private function checkOwner( $post){
-        $user = User::find($post->user_id);
-        if($user->id==Auth::user()->id)
-            return true;
-        else
-            return false;
     }
 }
