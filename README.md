@@ -16,6 +16,12 @@ docker run -d -p 8080:22 -p 80:80 --name [name] [docker]
 
 This will allow you to reach both the host machine and the docker trough ssh.
 
+The ***username is test*** and the ***password is admin***.
+
+```
+ssh -p 8080 test@host.ip.address
+```
+
 ### Starting the server
 
 Once connected to the docker these commands will allow you to run and reach the server trough browser.
