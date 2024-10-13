@@ -45,7 +45,7 @@ class PostController extends Controller
         $post->user_id = Auth::user()->id;
         $post->save();
         
-        return redirect()->route('posts')->with('success','The blog post was successfully saved!');
+        return redirect()->route('posts')->with('success','The blog post was successfully saved!')->setStatusCode(201);
     }
 
     public function singlePost(Post $post)
@@ -77,7 +77,7 @@ class PostController extends Controller
         $post->content = $validated['content'];
         $post->save();
 
-        return redirect()->route('singlePost',[$post])->with('success', 'The blog post was successfully edited!');
+        return redirect()->route('singlePost',[$post])->with('success', 'The blog post was successfully edited!')->setStatusCode(200);
     }
 
     public function getEdit(Post $post)
@@ -86,7 +86,7 @@ class PostController extends Controller
             abort(403);
         }
 
-            return redirect()->route('singlePost',[$post])->with('error','Only the post\'s owner can do this');
+            return redirect()->route('singlePost',[$post])->with('error','Only the post\'s owner can do this')->setStatusCode(200);
         
     }
 
@@ -102,6 +102,6 @@ class PostController extends Controller
 
 
         $post->delete();
-        return redirect()->route('posts')->with('success','The blog post was successfully deleted!');
+        return redirect()->route('posts')->with('success','The blog post was successfully deleted!')->setStatusCode(200);
     }
 }

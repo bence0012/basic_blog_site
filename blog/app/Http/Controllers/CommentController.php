@@ -38,11 +38,11 @@ class CommentController extends Controller
 
     public function delete(Post $post, Comment $comment)
     {
-        if (! Gate::allows('delete-post', $post)) {
+        if (! Gate::allows('delete-post', [$post, $comment])) {
             abort(403);
         }
         $comment->delete();
-        return redirect()->route('singlePost',[$post->id])->with('success','Comment successfilly deleted!');
+        return redirect()->route('singlePost',[$post->id])->with('success','Comment successfilly deleted!')->setStatusCode(200);
 
     }
 }
