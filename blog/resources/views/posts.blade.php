@@ -28,9 +28,9 @@
                     {{ csrf_field() }}
                     {{ method_field('GET') }}
 
-            
-                    <button type="submit">Create post</button>
-        
+                    @auth
+                        <button type="submit">Create post</button>
+                    @endauth
                 </form>
         </div>
     </div>

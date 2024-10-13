@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Comment;
 use Session;
 use Auth;
 
@@ -28,7 +29,7 @@ class PostController extends Controller
     {
         return view('create');
     }
-    public function post(Request $request):RedirectResponse
+    public function post(Request $request)
     {
         $validated =$request->validate([
             'title'=> 'required',
@@ -44,20 +45,26 @@ class PostController extends Controller
         return redirect()->route('posts')->with('success','The blog post was successfully saved!');
     }
 
-    public function singlePost($id)
+    public function singlePost(Post $post)
     {
-        $post = Post::find($id);
         $poster=User::find($post->user_id);
-        return view('singlePost')->with('post', $post)->with('poster', $poster->name);
+        $comments=Comment::where('post_id', $post->id)->orderBy('id','desc')->get();
+        $users=array();
+        foreach($comments as $comment)
+        {
+            if($comment->user_id!=null)
+                $comment->user_id=User::find($comment->user_id);
+            else
+                $users[]=null;
+        }
+        return view('singlePost')->with('post', $post)->with('poster', $poster->name)->with('comments', $comments->toArray());
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        
-        $post = Post::find($id);
         if(!$this->checkOwner($post))
         {
-            return redirect()->route('posts')->with('error','Only the post\'s owner can do this');
+            return redirect()->route('singlePost')->with('error','Only the post\'s owner can do this');
         }
 
         $validated =$request->validate([
@@ -68,30 +75,34 @@ class PostController extends Controller
         $post->content = $validated['content'];
         $post->save();
 
-        return $this->singlePost($id)->with('success', 'The blog post was successfully edited!');
+        return redirect()->route('singlePost',[$post])->with('success', 'The blog post was successfully edited!');
     }
 
-    public function getEdit($id)
+    public function getEdit(Post $post)
     {
-        $post = Post::find($id);
 
         if($this->checkOwner($post))
         {
-            return view('edit')->with('post', $post)->with('id', $id);
+            return view('edit')->with('post', $post);
         }
         else
         {
-            return redirect()->route('posts')->with('error','Only the post\'s owner can do this');
+            return redirect()->route('singlePost',[$post])->with('error','Only the post\'s owner can do this');
         }
     }
 
-    public function delete($id)
+    public function delete(Post $post)
     {
-        $post = Post::find($id);
         if(!$this->checkOwner($post))
         {
             return redirect()->route('posts')->with('error','Only the post\'s owner can do this');
         }
+
+        $comments=Comment::where('post_id', $post->id)->get();
+        foreach($comments as $comment)
+            $comment->delete();
+
+
         $post->delete();
         return redirect()->route('posts')->with('success','The blog post was successfully deleted!');
     }

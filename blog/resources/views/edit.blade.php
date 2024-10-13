@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Edit post') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('update',[$id]) }}">
+                    <form method="POST" action="{{ route('update',[$post['id']]) }}">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
 
