@@ -31,3 +31,4 @@ php artisan key:generate
 php artisan migrate
 php artisan serve --host 0.0.0.0 --port 80
 ```
+Now you can reach the site on the host machine at 0.0.0.0 or at the host ip adress.
